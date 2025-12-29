@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../api/axios";
 
 import { FaSignOutAlt, FaWallet } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
@@ -15,17 +15,10 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        const res = await axios.get("http://localhost:5000/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        const res = await API.get("/auth/me");
         setUser(res.data.user);
       } catch (error) {
-        console.log("Failed to fetch user");
+        console.error("Failed to fetch user", error);
       }
     };
 
