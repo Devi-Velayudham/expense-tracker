@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import API from "../api/axios";
 import AuthRightSide from "../components/AuthRightSide";
 
 export default function Login() {
@@ -13,12 +13,15 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        { email, password }
-      );
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+      });
 
+      // Save token
       localStorage.setItem("token", res.data.token);
+
+      // Redirect to dashboard
       window.location.href = "/dashboard";
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
@@ -27,11 +30,9 @@ export default function Login() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      
       {/* LEFT – LOGIN FORM */}
       <div className="flex items-center justify-center px-6">
         <div className="w-full max-w-md">
-
           {/* TITLE */}
           <h1 className="text-4xl font-bold text-purple-600 mb-8">
             Expense Tracker
@@ -66,7 +67,7 @@ export default function Login() {
                 placeholder="Min 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                autoComplete="new-password"
+                autoComplete="current-password"
                 className="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-purple-500"
                 required
               />
