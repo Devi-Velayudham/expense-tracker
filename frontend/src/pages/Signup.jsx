@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import API from "../api/axios";
 import { Link } from "react-router-dom";
 import AuthRightSide from "../components/AuthRightSide";
 
@@ -10,21 +10,22 @@ export default function Signup() {
   const [error, setError] = useState("");
 
   const handleSignup = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      await axios.post("http://localhost:5000/api/auth/register", {
-        name,
-        email,
-        password,
-      });
+  try {
+    await API.post("/auth/signup", {
+      name,
+      email,
+      password,
+    });
 
-      window.location.href = "/";
-    } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
-    }
-  };
+    window.location.href = "/";
+  } catch (err) {
+    setError(err.response?.data?.message || "Signup failed");
+  }
+};
+
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
